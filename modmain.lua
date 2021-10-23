@@ -54,6 +54,6 @@ Assets = {
 
 modimport("strings.lua")
 modimport("recipes.lua")
-modimport("postinits.lua")
+-- modimport("postinits.lua")
 
 AddMinimapAtlas("images/inventoryimages/ziiosword.xml")
