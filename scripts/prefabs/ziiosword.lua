@@ -10,14 +10,18 @@ local assets=
     Asset("ATLAS", "images/inventoryimages/ziiosword.xml"),
 }
 
--- TOOL SETTINGS
 local RcpType         = TUNING.ZiioRecipeType
-local walkspeed       = TUNING.ZIIOSWORDFUNCTION.WALKSPEED
+local sideeffect      = TUNING.ZIIOSWORDFUNCTION.PUNISH
+-- TOOL SETTINGS
+local hammermode      = TUNING.ZIIOSWORDFUNCTION.HAMMER
+local digmode         = TUNING.ZIIOSWORDFUNCTION.DIG
+local netmode         = TUNING.ZIIOSWORDFUNCTION.NET
+local oarmode         = TUNING.ZIIOSWORDFUNCTION.OAR
+local fishmode       = true
 local lightmode       = TUNING.ZIIOSWORDFUNCTION.LIGHT
 local umbrellamode    = TUNING.ZIIOSWORDFUNCTION.UMBRELLA
 local telepoofmode    = TUNING.ZIIOSWORDFUNCTION.TELEPOOF
-local hammermode      = TUNING.ZIIOSWORDFUNCTION.HAMMER
-local digmode         = TUNING.ZIIOSWORDFUNCTION.DIG
+local walkspeed       = TUNING.ZIIOSWORDFUNCTION.WALKSPEED
 
 -- WAEPON SETTINGS
 local damage          = TUNING.ZIIOSWORDFUNCTION.DAMAGE
@@ -41,6 +45,7 @@ local function onequip(inst, owner)
     end
 end
 
+
 local function onunequip(inst, owner)
     owner.AnimState:Hide("ARM_carry")
     owner.AnimState:Show("ARM_normal")
@@ -51,22 +56,24 @@ local function onunequip(inst, owner)
         inst.task:Cancel()
         inst.task = nil
     end
-    -- 卸下惩罚（越便宜+伤害高，惩罚力度越大）
-    if RcpType == 1 and damage > 999 then
-        owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.8)
-        owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.8)
-        owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.8)
-    elseif  RcpType == 1 or damage > 999 then
-        owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.5)
-        owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.5)
-        -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.5)
-        owner.components.health:SetPercent(0.5)
-    elseif RcpType == 2 then
-        owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.2)
-        owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.2)
-        -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.2)
-        owner.components.health:SetPercent(0.2)
-    end
+    -- 副作用：卸下惩罚（越便宜+伤害高，惩罚力度越大）
+    if sideeffect then
+        if RcpType == 1 and damage > 999 then
+            owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.8)
+            owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.8)
+            owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.8)
+        elseif  RcpType == 1 or damage > 999 then
+            owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.5)
+            owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.5)
+            -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.5)
+            owner.components.health:SetPercent(0.5)
+        elseif RcpType == 2 then
+            owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.2)
+            owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.2)
+            -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.2)
+            owner.components.health:SetPercent(0.2)
+        end
+    end    
 end
 
 local function NoHoles(pt)
@@ -85,14 +92,14 @@ local function onattack(inst, owner, target)
     if owner.components.sanity and sanitymode then
         owner.components.sanity:DoDelta(10)
     end
-    -- 冰冻效果
+    -- 冰冻效果（2下才冰住）
     if icemode then
         if target.components.freezable ~= nil then
             target.components.freezable:AddColdness(10)
             target.components.freezable:SpawnShatterFX()
         end
     end
-    -- 睡眠效果
+    -- 睡眠效果（1~2下才睡着）
     if sleepmode then
         if target.components.sleeper ~= nil then
             target.components.sleeper:AddSleepiness(8, 60, inst)
@@ -120,6 +127,7 @@ local function onattack(inst, owner, target)
     if tentaclemode then
         local pt = target:GetPosition()
         local numtentacles = 3
+
         owner:StartThread(function()
             if tentaclemode == 'normal' then
                 for k = 1, numtentacles do
@@ -204,9 +212,21 @@ local function fn(Sim)
     inst:AddTag("ziio")
     inst:AddTag("ziiosword")
     inst:AddTag("sharp")
+    if lightmode then
+        inst:AddTag("light")
+    end
+    
     if umbrellamode then
         inst:AddTag("umbrella")
         inst:AddTag("waterproofer")
+    end
+
+    if oarmode or fishmode then
+        inst:AddTag("allow_action_on_impassable")
+    end
+
+    if fishmode then
+        inst:AddTag("fishingrod")
     end
 
     local floater_swap_data =
@@ -234,13 +254,7 @@ local function fn(Sim)
 
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(damage)
-    if rangemode then
-        local attackrange = 20
-        if type(rangemode) == "number" then
-            attackrange = rangemode
-        end
-        inst.components.weapon:SetRange(attackrange, attackrange)
-    end
+    if rangemode then inst.components.weapon:SetRange(rangemode, rangemode) end
     inst.components.weapon:SetOnAttack(onattack)
     inst.components.weapon:SetProjectile("ziio_projectile")
 
@@ -253,14 +267,30 @@ local function fn(Sim)
     if digmode then
         inst.components.tool:SetAction(ACTIONS.DIG,    100)
     end
-    inst.components.tool:SetAction(ACTIONS.NET,    100)
+    if netmode then
+        inst.components.tool:SetAction(ACTIONS.NET,    100)
+    end
 
     if telepoofmode then
         inst:AddComponent("blinkstaff")
+        inst.components.blinkstaff:SetFX("sand_puff_large_front", "sand_puff_large_back")
     end
 
     inst:AddInherentAction(ACTIONS.TILL)
     inst:AddComponent("farmtiller")
+
+
+    if oarmode then
+        inst:AddComponent("oar")
+        inst.components.oar.force = 1
+        inst.components.oar.max_velocity = 1
+    end
+
+    if fishmode then
+        inst:AddComponent("fishingrod")
+        inst.components.fishingrod:SetWaitTimes(1,3)
+        inst.components.fishingrod:SetStrainTimes(0,10)
+    end
 
     if umbrellamode then
         inst:AddComponent("waterproofer")
