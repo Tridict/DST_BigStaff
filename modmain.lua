@@ -15,16 +15,19 @@ TUNING.ZIIOSWORDFUNCTION = {}
 -- TUNING.ZIIOSWORDFUNCTION.HUNGER = GetModConfigData("hungermode")
 -- TUNING.ZIIOSWORDFUNCTION.TEMP   = GetModConfigData("tempmode")
 -- TUNING.ZIIOSWORDFUNCTION.PROT   = GetModConfigData("protmode")
-TUNING.ZIIOSWORDFUNCTION.RES    = GetModConfigData("resmode")
+-- TUNING.ZIIOSWORDFUNCTION.RES    = GetModConfigData("resmode")
+TUNING.ZiioRecipeType              = GetModConfigData("recipemethod")
+TUNING.ZIIOSWORDFUNCTION.PUNISH    = GetModConfigData("sideeffect")
 
 -- TOOL SETTINGS
-TUNING.ZiioRecipeType              = GetModConfigData("recipemethod")
-TUNING.ZIIOSWORDFUNCTION.WALKSPEED = GetModConfigData("walkspeed")
+TUNING.ZIIOSWORDFUNCTION.HAMMER    = GetModConfigData("hammermode")
+TUNING.ZIIOSWORDFUNCTION.DIG       = GetModConfigData("digmode")
+TUNING.ZIIOSWORDFUNCTION.NET       = GetModConfigData("netmode")
+TUNING.ZIIOSWORDFUNCTION.OAR       = GetModConfigData("oarmode")
 TUNING.ZIIOSWORDFUNCTION.LIGHT     = GetModConfigData("lightmode")
 TUNING.ZIIOSWORDFUNCTION.UMBRELLA  = GetModConfigData("umbrellamode")
 TUNING.ZIIOSWORDFUNCTION.TELEPOOF  = GetModConfigData("telepoofmode")
-TUNING.ZIIOSWORDFUNCTION.HAMMER    = GetModConfigData("hammermode")
-TUNING.ZIIOSWORDFUNCTION.DIG       = GetModConfigData("digmode")
+TUNING.ZIIOSWORDFUNCTION.WALKSPEED = GetModConfigData("walkspeed")
 
 -- WAEPON SETTINGS
 TUNING.ZIIOSWORDFUNCTION.DAMAGE    = GetModConfigData("damage")

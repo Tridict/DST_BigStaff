@@ -20,12 +20,21 @@ local tempmode        = false
 -- local resmode      = TUNING.ZIIOSWORDFUNCTION.RES
 local resmode         = true
 
+
+-- 正式启用的
 local RcpType         = TUNING.ZiioRecipeType
+local sideeffect      = TUNING.ZIIOSWORDFUNCTION.PUNISH
 -- TOOL SETTINGS
 local hammermode      = TUNING.ZIIOSWORDFUNCTION.HAMMER
 local digmode         = TUNING.ZIIOSWORDFUNCTION.DIG
-local oarmode         = true
-local oceanfishmode   = true
+local netmode         = TUNING.ZIIOSWORDFUNCTION.NET
+local oarmode         = TUNING.ZIIOSWORDFUNCTION.OAR
+local fishmode       = true
+-- TUNING.ZIIOSWORDFUNCTION.OCEANFISH
+local oceanfishmode   = false
+if not fishmode then
+    oceanfishmode   = false
+end
 local lightmode       = TUNING.ZIIOSWORDFUNCTION.LIGHT
 local umbrellamode    = TUNING.ZIIOSWORDFUNCTION.UMBRELLA
 local telepoofmode    = TUNING.ZIIOSWORDFUNCTION.TELEPOOF
@@ -122,22 +131,24 @@ local function onunequip(inst, owner)
         inst.task = nil
     end
     if resmode then owner:RemoveEventCallback("cantbuild", giveitems) end
-    -- 卸下惩罚（越便宜+伤害高，惩罚力度越大）
-    if RcpType == 1 and damage > 999 then
-        owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.8)
-        owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.8)
-        owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.8)
-    elseif  RcpType == 1 or damage > 999 then
-        owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.5)
-        owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.5)
-        -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.5)
-        owner.components.health:SetPercent(0.5)
-    elseif RcpType == 2 then
-        owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.2)
-        owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.2)
-        -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.2)
-        owner.components.health:SetPercent(0.2)
-    end
+    -- 副作用：卸下惩罚（越便宜+伤害高，惩罚力度越大）
+    if sideeffect then
+        if RcpType == 1 and damage > 999 then
+            owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.8)
+            owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.8)
+            owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.8)
+        elseif  RcpType == 1 or damage > 999 then
+            owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.5)
+            owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.5)
+            -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.5)
+            owner.components.health:SetPercent(0.5)
+        elseif RcpType == 2 then
+            owner.components.hunger:DoDelta(- owner.components.hunger.max * 0.2)
+            owner.components.sanity:DoDelta(- owner.components.sanity.max * 0.2)
+            -- owner.components.health:DoDelta(- owner.components.health.maxhealth * 0.2)
+            owner.components.health:SetPercent(0.2)
+        end
+    end    
 end
 
 local function NoHoles(pt)
@@ -284,14 +295,23 @@ local function fn(Sim)
     inst:AddTag("ziio")
     inst:AddTag("ziiosword")
     inst:AddTag("sharp")
+    if lightmode then
+        inst:AddTag("light")
+    end
+    
     if umbrellamode then
         inst:AddTag("umbrella")
         inst:AddTag("waterproofer")
     end
 
-    if oarmode or oceanfishmode then
+    if oarmode or fishmode then
         inst:AddTag("allow_action_on_impassable")
     end
+
+    if fishmode then
+        inst:AddTag("fishingrod")
+    end
+
     if oceanfishmode then
         inst:AddTag("accepts_oceanfishingtackle")
     end
@@ -354,7 +374,9 @@ local function fn(Sim)
     if digmode then
         inst.components.tool:SetAction(ACTIONS.DIG,    100)
     end
-    inst.components.tool:SetAction(ACTIONS.NET,    100)
+    if netmode then
+        inst.components.tool:SetAction(ACTIONS.NET,    100)
+    end
 
     if telepoofmode then
         inst:AddComponent("blinkstaff")
@@ -371,12 +393,14 @@ local function fn(Sim)
         inst.components.oar.max_velocity = 1
     end
 
-    -- 海钓竿
-    if oceanfishmode then
+    if fishmode then
         inst:AddComponent("fishingrod")
         inst.components.fishingrod:SetWaitTimes(1,3)
         inst.components.fishingrod:SetStrainTimes(0,10)
+    end
 
+    -- 海钓竿
+    if oceanfishmode then
         inst:AddComponent("oceanfishingrod")
         inst.components.oceanfishingrod:SetDefaults("oceanfishingbobber_none_projectile", TUNING.OCEANFISHING_TACKLE.BASE, TUNING.OCEANFISHING_LURE.HOOK, {build = "oceanfishing_hook", symbol = "hook"})
         -- OnStartedFishing
