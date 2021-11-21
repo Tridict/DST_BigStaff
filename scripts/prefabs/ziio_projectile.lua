@@ -20,9 +20,7 @@ local function SplashOceanPoop(poop)
 end
 
 local function SpawnPoop(inst, owner, target)
-    -- local poop = SpawnPrefab("purplegem")
     local poop = SpawnPrefab("feather_robin_winter")
-    -- poop.SoundEmitter:PlaySound("dontstarve/creatures/monkey/poopsplat")
     if target ~= nil and target:IsValid() then
         LaunchAt(poop, target, owner ~= nil and owner:IsValid() and owner or inst)
     else
@@ -37,7 +35,6 @@ end
 
 local function OnHit(inst, owner, target)
     SpawnPoop(inst, owner, target)
-    -- target:PushEvent("attacked", { attacker = owner, damage = 0 })
     inst:Remove()
 end
 

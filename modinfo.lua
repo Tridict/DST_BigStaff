@@ -1,5 +1,5 @@
 -- This information tells other players more about the mod
-name = "A Big Staff (大法杖) dev1.1"
+name = "A Big Staff (大法杖) 1.1"
 description = 
 [[We currently release the 1.1 version. You can turn off the side effect (negative effects while removing) now.
 更新到1.1版本啦！现在可以把副作用（卸下时的负面效果，默认开启，耗材越低、攻击力越强，副作用越明显）关闭了~还新增了划船桨的功能，可在设置中开启。
