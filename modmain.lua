@@ -2,7 +2,6 @@ local TUNING = GLOBAL.TUNING
 
 local require = GLOBAL.require
 local Ingredient = GLOBAL.Ingredient
--- local RECIPETABS = GLOBAL.RECIPETABS
 local STRINGS = GLOBAL.STRINGS
 local Recipe = GLOBAL.Recipe
 local TECH = GLOBAL.TECH
@@ -12,10 +11,6 @@ PrefabFiles = {
 }
 
 TUNING.ZIIOSWORDFUNCTION = {}
--- TUNING.ZIIOSWORDFUNCTION.HUNGER = GetModConfigData("hungermode")
--- TUNING.ZIIOSWORDFUNCTION.TEMP   = GetModConfigData("tempmode")
--- TUNING.ZIIOSWORDFUNCTION.PROT   = GetModConfigData("protmode")
--- TUNING.ZIIOSWORDFUNCTION.RES    = GetModConfigData("resmode")
 TUNING.ZiioRecipeType              = GetModConfigData("recipemethod")
 TUNING.ZIIOSWORDFUNCTION.PUNISH    = GetModConfigData("sideeffect")
 
@@ -32,6 +27,7 @@ TUNING.ZIIOSWORDFUNCTION.WALKSPEED = GetModConfigData("walkspeed")
 -- WAEPON SETTINGS
 TUNING.ZIIOSWORDFUNCTION.DAMAGE    = GetModConfigData("damage")
 TUNING.ZIIOSWORDFUNCTION.RANGE     = GetModConfigData("rangemode")
+TUNING.ZIIOSWORDFUNCTION.PROJECTILE    = GetModConfigData("projectile")
 TUNING.ZIIOSWORDFUNCTION.HEALTH    = GetModConfigData("healthmode")
 TUNING.ZIIOSWORDFUNCTION.SANITY    = GetModConfigData("sanitymode")
 TUNING.ZIIOSWORDFUNCTION.ICE       = GetModConfigData("icemode")
@@ -41,7 +37,6 @@ TUNING.ZIIOSWORDFUNCTION.TENTACLE  = GetModConfigData("tentaclemode")
 
 
 Assets = {
-    --Asset("ANIM", "anim/ziio_projectile.zip"),
     Asset("ANIM", "anim/all_staff.zip"),
     Asset("ANIM", "anim/monkey_projectile.zip"),
     Asset("ANIM", "anim/swap_all_staff.zip"),
@@ -52,11 +47,7 @@ Assets = {
     Asset("ATLAS", "images/ziiotab.xml"),
 }
 
---RECIPETABS.ZIIOWORKS = AddRecipeTab("ZiioWorks", 956, "images/ziiotab.xml", "ziiotab.tex", "ziioworker")
-
-
 modimport("strings.lua")
 modimport("recipes.lua")
--- modimport("postinits.lua")
 
 AddMinimapAtlas("images/inventoryimages/ziiosword.xml")
