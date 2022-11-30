@@ -9,6 +9,8 @@ local prefabs =
     "splash_ocean",
 }
 
+local projectile      = TUNING.ZIIOSWORDFUNCTION.PROJECTILE
+
 local function SplashOceanPoop(poop)
     if not poop.components.inventoryitem:IsHeld() then
         local x, y, z = poop.Transform:GetWorldPosition()
@@ -19,8 +21,10 @@ local function SplashOceanPoop(poop)
     end
 end
 
-local function SpawnPoop(inst, owner, target)
-    local poop = SpawnPrefab("feather_robin_winter")
+
+local function SpawnPoop(inst, owner, target, projectile)
+    local poop = SpawnPrefab(projectile)
+
     if target ~= nil and target:IsValid() then
         LaunchAt(poop, target, owner ~= nil and owner:IsValid() and owner or inst)
     else
@@ -34,12 +38,16 @@ local function SpawnPoop(inst, owner, target)
 end
 
 local function OnHit(inst, owner, target)
-    SpawnPoop(inst, owner, target)
+    if projectile then
+        SpawnPoop(inst, owner, target, projectile)
+    end
     inst:Remove()
 end
 
 local function OnMiss(inst, owner, target)
-    SpawnPoop(inst, owner, nil)
+    if projectile then
+        SpawnPoop(inst, owner, nil, projectile)
+    end
     inst:Remove()
 end
 

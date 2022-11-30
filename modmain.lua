@@ -27,6 +27,7 @@ TUNING.ZIIOSWORDFUNCTION.WALKSPEED = GetModConfigData("walkspeed")
 -- WAEPON SETTINGS
 TUNING.ZIIOSWORDFUNCTION.DAMAGE    = GetModConfigData("damage")
 TUNING.ZIIOSWORDFUNCTION.RANGE     = GetModConfigData("rangemode")
+TUNING.ZIIOSWORDFUNCTION.PROJECTILE    = GetModConfigData("projectile")
 TUNING.ZIIOSWORDFUNCTION.HEALTH    = GetModConfigData("healthmode")
 TUNING.ZIIOSWORDFUNCTION.SANITY    = GetModConfigData("sanitymode")
 TUNING.ZIIOSWORDFUNCTION.ICE       = GetModConfigData("icemode")

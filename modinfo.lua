@@ -1,13 +1,13 @@
 -- This information tells other players more about the mod
-name = "A Big Staff (大法杖) 1.1"
+name = "A Big Staff (大法杖) 1.2"
 description = 
-[[We currently release the 1.1 version. You can turn off the side effect (negative effects while removing) now.
-更新到1.1版本啦！现在可以把副作用（卸下时的负面效果，默认开启，耗材越低、攻击力越强，副作用越明显）关闭了~还新增了划船桨的功能，可在设置中开启。
+[[We currently release the 1.2 version. You can choose or turn off the projectile (default is feather) now.
+更新到1.2版本啦！现在可以在设置中选择攻击时的投掷物（默认依然是羽毛），或选择关闭投掷物了~
 
 A big all-powerful staff that can be used in many ways, and it is also a very powerful weapon, so you don't need to switch your hand-equipment with this big staff! 
 这是一把具备多用途的全能大法杖，同时也是一把很酷炫的武器！有了这把大法杖，你基本上就不需要换你的手持装备啦！它具备砍树、挖矿、锤子、铲子、捕虫网、犁地锄、钓鱼、照明、步行手杖、传送法杖等多种生活功能，同时也有多种武器效果可选（见选项菜单）。（提示：贪心是会有代价的哦！）]]
 author = "Roomcar & Cora"
-version = "dev1.1"
+version = "1.2"
 
 forumthread = ""
 
@@ -192,6 +192,17 @@ Header("Weapon"),
             { description = "Very Long", data = 30 },
         },
         default = 20
+    },
+    {
+        name = "projectile",
+        label = "Projectile（投掷物）",
+        options =
+        {
+            { description = "Off",  data = false },
+            { description = "Feather", data = 'feather_robin_winter' },
+            { description = "Gem", data = 'purplegem' },
+        },
+        default = 'feather_robin_winter'
     },
     --  攻击效果类
     {
