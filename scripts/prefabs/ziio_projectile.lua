@@ -21,8 +21,10 @@ local function SplashOceanPoop(poop)
     end
 end
 
+
 local function SpawnPoop(inst, owner, target, projectile)
     local poop = SpawnPrefab(projectile)
+
     if target ~= nil and target:IsValid() then
         LaunchAt(poop, target, owner ~= nil and owner:IsValid() and owner or inst)
     else
